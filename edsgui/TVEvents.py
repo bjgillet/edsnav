@@ -109,14 +109,6 @@ class Example(Gtk.ApplicationWindow):
         print(json.dumps(js_log[0],indent=4))
         ev_tree_view.event_list_replace(js_log)
             
-        
-
-
-
-        
-
-
-
 
 class MyApp(Adw.Application):
     def __init__(self, **kwargs):
@@ -140,5 +132,6 @@ class MyApp(Adw.Application):
     def guiEventsTreeCallback (js_event) :
         print("--- selected event : " + json.dumps(js_event))
 
-app = MyApp(application_id="lab.example.GtkApplication")
-app.run()
+if __name__ == "__main__" :
+    app = MyApp(application_id="lab.example.GtkApplication")
+    app.run()
