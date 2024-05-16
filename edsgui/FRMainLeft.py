@@ -5,12 +5,32 @@ gi.require_version('Adw', '1')
 from gi.repository import Gtk, Adw
 
 
-class EventsTreeView :
+class LeftPanel :
 
     def __init__(self, master, container):
-
         
-        self.master = master    #       :       master application for callbacks
+        self.master = master    #       :       master application for callbacks - transmit to widgets
+
+        exp_settings = Gtk.Expander(label="Settings")
+        exp_session = Gtk.Expander(label="Session")
+
+        bx_settings = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        exp_settings.set_child(bx_settings)
+
+        bx_settings.append(Gtk.Label(label="Post Session"))
+        bx_settings.append(Gtk.Label(label="log dir : <logdir>"))
+        bx_settings.append(Gtk.Label(label="log file : <logfile>"))
+        bx_settings.append(Gtk.Button(label="change"))
+
+        bx_session = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        bx_session.append(Gtk.Button(label="change"))
+        exp_session.set_child(bx_session)
+
+        bx_session.append(Gtk.Label(label="< SESSION TREE VIEW >"))
+
+        container.append(bx_settings)
+        container.append(bx_session)
+
 
   
 
@@ -24,41 +44,15 @@ if __name__ == "__main__" :
             print(" kwargs : " + str(kwargs))
             super().__init__(*args,**kwargs)
             
-            self.box1 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
             self.box2 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-            self.box3 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-            self.set_child(self.box1)
-            self.box1.append(self.box2)
-            self.box1.append(self.box3)
-            self.box1.set_spacing(3)
-            print("box1 vexpand : " +str(Gtk.Widget.get_vexpand(self.box1)))
-            print("box2 vexpand : " +str(Gtk.Widget.get_vexpand(self.box2)))
-            print("spacing : " + str(self.box2.get_spacing()))
-            print("homogeneous : " + str(self.box2.get_homogeneous()))
-            print("baseline : "+ str(self.box2.get_baseline_position()))
-            self.box2.set_baseline_position(Gtk.BaselinePosition.BOTTOM)
+            self.set_child(self.box2)
+ 
+            self.box2.set_baseline_position(Gtk.BaselinePosition.TOP)
             self.box2.set_homogeneous(False)
             self.box2.set_spacing(3)
 
-            self.button1= Gtk.Button(label="Cliquez moi")
-            self.box2.append(self.button1)
-            self.box2.append(Gtk.Button(label="Cliquez moi - box 1"))
-            print("Button1 vexpand : " +str(Gtk.Widget.get_vexpand(self.button1)))
-            
-            self.box3.append(Gtk.Button(label="Cliquez moi - box 2"))
-            self.box3.append(Gtk.Button(label="Cliquez moi - box 2"))
-            self.box3.set_spacing(5)
-
-            ev_tree_view = EventsTreeView(None, self.box2)
-            
-            js_log = []  
-            logfile="./log/Journal.2024-05-12T173005.01.log"
-            fd = open(logfile)
-            for i in range(0,10):
-                line = fd.readline()
-                js_log.append(json.loads(line))
-            print(json.dumps(js_log[0],indent=4))
-            ev_tree_view.event_list_replace(js_log)
+            left_panel=LeftPanel(None,self.box2)
+            self.set_child(self.box2)
             
 
     class TestUnit(Adw.Application):
