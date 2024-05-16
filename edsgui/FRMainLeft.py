@@ -12,57 +12,7 @@ class EventsTreeView :
         
         self.master = master    #       :       master application for callbacks
 
-        #       :       Creating the TreeStore and populating it
-
-        self.tree_store = Gtk.TreeStore(str, str)
-
-        #       :   Initializing events list
-        list_events=None
-        if list_events != None :
-            for event in list_events :
-                self.tree_store.append(None,[json.loads(event)['event'],event])
-
-        #       :       Creating Column/Renderer for display - only one is displayed
-
-        col1 = Gtk.TreeViewColumn("Event List", Gtk.CellRendererText(), text=0)
-        # col2 = Gtk.TreeViewColumn("Col2") # no renderer 
-
-        #       :       Creating TreeView, adding column and mapping change event
-        self.tree_view = Gtk.TreeView(model = self.tree_store)
-        self.tree_view.append_column(col1)
-        Gtk.Widget.set_vexpand(self.tree_view,True)   # We want the tree to extend to bottom of the box.
-        select = self.tree_view.get_selection()
-        select.connect("changed", self.on_tree_selection_changed)
-
-        #       :   Creating a scrolled window for the TreeView
-
-        self.scroll_tree=Gtk.ScrolledWindow()
-        self.scroll_tree.set_child(self.tree_view)
-
-        container.append(self.scroll_tree)
-        
-
-    #       :
-    #       :   Method called as a Tree item is selected.
-    #       :
-
-    def on_tree_selection_changed(self, selection):
-        model, treeiter = selection.get_selected()
-        if treeiter is not None:
-            print("You selected" + str(model[treeiter][1]))
-
-    def event_append(self, event):
-        self.tree_store.append(None, [event['event'],event])
-
-    def event_list_replace(self, event_list=[]):
-        if event_list != None:
-            self.tree_store.clear()
-            self.tree_view.set_model(None)  #  Removing data display during update (for performance)
-            for event in event_list :
-                print("Event name : " + event['event'])
-                self.tree_store.append(None,[event['event'],json.dumps(event)])
-            self.tree_view.set_model(self.tree_store)  #  Restoring data model.
-
+  
 
 if __name__ == "__main__" :
 
